@@ -10,6 +10,8 @@ It allows you to:
 - format a postcode correctly
 - get the outcode, inward code or postcode sector
 
+For example, suppose you request users provide their postcode when filling out their address; there's a very strong possibility they'll enter something like `sw1a2aa`. This class not only allows you to check that it's a valid UK postcode, but also format it correctly &mdash; in this example, that means `SW1A 2AA`.
+
 ## Installation
 
 Via Composer:
