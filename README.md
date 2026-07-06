@@ -1,6 +1,6 @@
 # UK Postcode
 
-[![CircleCI](https://circleci.com/gh/lukaswhite/uk-postcode.svg?style=svg)](https://circleci.com/gh/lukaswhite/uk-postcode)
+[![CircleCI](https://circleci.com/gh/AgentSoftware/uk-postcode.svg?style=svg)](https://circleci.com/gh/AgentSoftware/uk-postcode)
 
 A PHP class that represents a UK Postcode.
 
@@ -17,13 +17,13 @@ For example, suppose you request users provide their postcode when filling out t
 Via Composer:
 
 ```bash
-composer require lukaswhite\uk-postcode
+composer require agentsoftware/uk-postcode
 ```
 
 ### Create an instance
 
 ```php
-use Lukaswhite\UkPostcode\UkPostcode;
+use AgentSoftware\UkPostcode\UkPostcode;
 
 $postcode = new UkPostcode('sw1a2aa');
 ```
@@ -64,7 +64,7 @@ $postcode = new UkPostcode('sw1a2aa');
 print $postcode->getOutcode();
 // outputs "SW1A"
 
-$postcode = new Lukaswhite\UkPostcodes\UkPostcode('GL9 1AH');
+$postcode = new AgentSoftware\UkPostcode\UkPostcode('GL9 1AH');
 print $postcode->getOutcode();
 // outputs "GL9"
 
@@ -82,7 +82,7 @@ $postcode = new UkPostcode('sw1a2aa');
 print $postcode->getInwardCode();
 // outputs "2AA"
 
-$postcode = new Lukaswhite\UkPostcodes\UkPostcode('GL9 1AH');
+$postcode = new AgentSoftware\UkPostcode\UkPostcode('GL9 1AH');
 print $postcode->getInwardCode();
 // outputs "1AH"
 
@@ -100,7 +100,7 @@ $postcode = new UkPostcode('sw1a2aa');
 print $postcode->getSector();
 // outputs "SW1A 2"
 
-$postcode = new Lukaswhite\UkPostcodes\UkPostcode('GL9 1AH');
+$postcode = new AgentSoftware\UkPostcode\UkPostcode('GL9 1AH');
 print $postcode->getSector();
 // outputs "GL9 1"
 

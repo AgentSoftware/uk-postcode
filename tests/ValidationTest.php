@@ -7,31 +7,31 @@ class TestValidation extends \PHPUnit\Framework\TestCase {
 	 */
 	public function testValid()
 	{		
-		$this->assertTrue(\Lukaswhite\UkPostcode\UkPostcode::validate('GL9 1AH'));
-		$this->assertTrue(\Lukaswhite\UkPostcode\UkPostcode::validate('gl91ah'));
-		$this->assertTrue(\Lukaswhite\UkPostcode\UkPostcode::validate('Gl91Ah'));
-		$this->assertTrue(\Lukaswhite\UkPostcode\UkPostcode::validate('gl  9 1 a    h'));
-		$this->assertTrue(\Lukaswhite\UkPostcode\UkPostcode::validate('SW95 9DH'));
-		$this->assertTrue(\Lukaswhite\UkPostcode\UkPostcode::validate('SW1A 2AA'));
+		$this->assertTrue(\AgentSoftware\UkPostcode\UkPostcode::validate('GL9 1AH'));
+		$this->assertTrue(\AgentSoftware\UkPostcode\UkPostcode::validate('gl91ah'));
+		$this->assertTrue(\AgentSoftware\UkPostcode\UkPostcode::validate('Gl91Ah'));
+		$this->assertTrue(\AgentSoftware\UkPostcode\UkPostcode::validate('gl  9 1 a    h'));
+		$this->assertTrue(\AgentSoftware\UkPostcode\UkPostcode::validate('SW95 9DH'));
+		$this->assertTrue(\AgentSoftware\UkPostcode\UkPostcode::validate('SW1A 2AA'));
 		
 		// @todo This postcode doesn't actually exist, but the forma is perfectly valid. Should it pass or fail?
-		$this->assertTrue(\Lukaswhite\UkPostcode\UkPostcode::validate('SW50 9DH'));
+		$this->assertTrue(\AgentSoftware\UkPostcode\UkPostcode::validate('SW50 9DH'));
 
 		// Alternate method
-		$postcode = new \Lukaswhite\UkPostcode\UkPostcode('GL9 1AH');
+		$postcode = new \AgentSoftware\UkPostcode\UkPostcode('GL9 1AH');
 		$this->assertTrue($postcode->isValid());
-		$postcode = new \Lukaswhite\UkPostcode\UkPostcode('gl91ah');
+		$postcode = new \AgentSoftware\UkPostcode\UkPostcode('gl91ah');
 		$this->assertTrue($postcode->isValid());
-		$postcode = new \Lukaswhite\UkPostcode\UkPostcode('Gl91Ah');
+		$postcode = new \AgentSoftware\UkPostcode\UkPostcode('Gl91Ah');
 		$this->assertTrue($postcode->isValid());
-		$postcode = new \Lukaswhite\UkPostcode\UkPostcode('gl  9 1 a    h');
+		$postcode = new \AgentSoftware\UkPostcode\UkPostcode('gl  9 1 a    h');
 		$this->assertTrue($postcode->isValid());
-		$postcode = new \Lukaswhite\UkPostcode\UkPostcode('SW95 9DH');
+		$postcode = new \AgentSoftware\UkPostcode\UkPostcode('SW95 9DH');
 		$this->assertTrue($postcode->isValid());
-		$postcode = new \Lukaswhite\UkPostcode\UkPostcode('SW1A 2AA');
+		$postcode = new \AgentSoftware\UkPostcode\UkPostcode('SW1A 2AA');
 		$this->assertTrue($postcode->isValid());
 
-		$postcode = new \Lukaswhite\UkPostcode\UkPostcode('SW50 9DH');
+		$postcode = new \AgentSoftware\UkPostcode\UkPostcode('SW50 9DH');
 		$this->assertTrue($postcode->isValid());
 
 	}
@@ -41,13 +41,13 @@ class TestValidation extends \PHPUnit\Framework\TestCase {
 	 */
 	public function testInvalid()
 	{
-		$this->assertFalse(\Lukaswhite\UkPostcode\UkPostcode::validate('postcode'));
-		$this->assertFalse(\Lukaswhite\UkPostcode\UkPostcode::validate('P05T C0DE'));	
+		$this->assertFalse(\AgentSoftware\UkPostcode\UkPostcode::validate('postcode'));
+		$this->assertFalse(\AgentSoftware\UkPostcode\UkPostcode::validate('P05T C0DE'));	
 
-		$postcode = new \Lukaswhite\UkPostcode\UkPostcode('postcode');
+		$postcode = new \AgentSoftware\UkPostcode\UkPostcode('postcode');
 		$this->assertFalse($postcode->isValid());
 
-		$postcode = new \Lukaswhite\UkPostcode\UkPostcode('P05T C0DE');
+		$postcode = new \AgentSoftware\UkPostcode\UkPostcode('P05T C0DE');
 		$this->assertFalse($postcode->isValid());	
 	}
 
@@ -58,7 +58,7 @@ class TestValidation extends \PHPUnit\Framework\TestCase {
 	{
 		if (($handle = fopen(__DIR__."/fixtures/postcodes.csv", "r")) !== FALSE) {
 	    while (($data = fgetcsv($handle, 50, ",")) !== FALSE) {
-				$postcode = new \Lukaswhite\UkPostcode\UkPostcode( $data[ 0 ] );
+				$postcode = new \AgentSoftware\UkPostcode\UkPostcode( $data[ 0 ] );
 				$this->assertTrue($postcode->isValid());
 	    }
 	    fclose($handle);
