@@ -1,61 +1,63 @@
-<?php namespace AgentSoftware\UkPostcode;
+<?php
+
+namespace AgentSoftware\UkPostcode;
 
 /**
  * UkPostcode class
  *
  * Represents a UK Postcode
  */
-class UkPostcode {
+class UkPostcode
+{
+    /**
+     * String representation of the postcode
+     *
+     * @var string
+     */
+    public $postcode;
 
-	/**
-	 * String representation of the postcode
-	 * 
-	 * @var string
-	 */	
-	public $postcode;
+    /**
+     * Constructor
+     *
+     * Create an instance by providing a string representation of the postcode; it's fairly lax about the format.
+     * So in other words, it'll accept any of the following:
+     *
+     *   GL9 1AH
+     *   gl91ah
+     *   Gl91Ah
+     *   gl  9 1 a    h
+     *
+     * @param string $postcode
+     */
+    public function __construct(string $postcode)
+    {
+        $this->postcode = $postcode;
+    }
 
-	/**
-	 * Constructor
-	 *
-	 * Create an instance by providing a string representation of the postcode; it's fairly lax about the format.
-	 * So in other words, it'll accept any of the following:
-	 *
-	 *   GL9 1AH
-	 *   gl91ah
-	 *   Gl91Ah
-	 *   gl  9 1 a    h
-	 *   
-	 * @param string $postcode
-	 */
-	public function __construct(string $postcode)
-	{
-		$this->postcode = $postcode;
-	}
+    /**
+     * Utility (static) function; validate the supplied postcode.
+     *
+     * @param string $postcode
+     * @return bool
+     */
+    public static function validate(string $postcode): bool
+    {
+        // Need to do an assignment, because we're going to pass by reference
+        $toCheck = $postcode;
 
-	/**
-	 * Utility (static) function; validate the supplied postcode.
-	 * 
-	 * @param string $postcode
-	 * @return bool
-	 */
-	public static function validate(string $postcode): bool
-	{
-		// Need to do an assignment, because we're going to pass by reference
-		$toCheck = $postcode;
+        // Thr format function validates the postcode.
+        return self::format($toCheck);
+    }
 
-		// Thr format function validates the postcode.
-		return self::format($toCheck);
-	}
-	
 
-	/**
-	 * Utility (static) function; format the supplied postcode.
-	 * 
-	 * @param string $toCheck
-	 * @return bool
-	 */
-	public static function format(string &$toCheck): bool
-	{		
+    /**
+     * Utility (static) function; format the supplied postcode.
+     *
+     * @param string $toCheck
+     * @return bool
+     */
+    public static function format(string &$toCheck): bool
+    {
 
         // Permitted letters depend upon their position in the postcode.
         $alpha1 = "[abcdefghijklmnoprstuwyz]";                          // Character 1
@@ -102,16 +104,18 @@ class UkPostcode {
         // Check the string against the six types of postcodes
         foreach ($pcexp as $regexp) {
 
-            if (preg_match($regexp,$postcode, $matches)) {
+            if (preg_match($regexp, $postcode, $matches)) {
 
                 // Load new postcode back into the form element
-                $postcode = strtoupper ($matches[1] . ' ' . $matches [3]);
+                $postcode = strtoupper($matches[1] . ' ' . $matches [3]);
 
                 // Take account of the special BFPO c/o format
-                $postcode = preg_replace ('/C\/O([[:space:]]{0,})/', 'c/o ', $postcode);
+                $postcode = preg_replace('/C\/O([[:space:]]{0,})/', 'c/o ', $postcode);
 
                 // Take account of special Anquilla postcode format (a pain, but that's the way it is)
-                if (preg_match($pcexp[7],strtolower($toCheck), $matches)) $postcode = 'AI-2640';
+                if (preg_match($pcexp[7], strtolower($toCheck), $matches)) {
+                    $postcode = 'AI-2640';
+                }
 
                 // Remember that we have found that the code is valid and break from loop
                 $valid = true;
@@ -121,87 +125,87 @@ class UkPostcode {
 
         // Return with the reformatted valid postcode in uppercase if the postcode was
         // valid
-        if ($valid){
+        if ($valid) {
             $toCheck = $postcode;
             return true;
         }
 
         return false;
-	
-	}
 
-	/**
-	 * Validates this postcode.
-	 *
-	 * @return bool
-	 */
-	public function isValid(): bool
-	{
-		return self::validate($this->postcode);
-	}
+    }
 
-	/**
-	 * Get the outcode; that is, the first part of the postcode.
-	 *
-	 * @return string
-	 */
-	public function getOutcode(): string
-	{
-		// Format the postcode first		
+    /**
+     * Validates this postcode.
+     *
+     * @return bool
+     */
+    public function isValid(): bool
+    {
+        return self::validate($this->postcode);
+    }
+
+    /**
+     * Get the outcode; that is, the first part of the postcode.
+     *
+     * @return string
+     */
+    public function getOutcode(): string
+    {
+        // Format the postcode first
         $formatted_postcode = strtoupper(str_replace(' ', '', $this->postcode));
 
         // The outcode is the postcode less the last three characters
         return substr($formatted_postcode, 0, (strlen($formatted_postcode) - 3));
-    
-	}
 
-	/**
-	 * Returns the inward code
-	 * 
-	 * @return string
-	 */
-	public function getInwardCode(): string
-	{
-		// Format the postcode first		
+    }
+
+    /**
+     * Returns the inward code
+     *
+     * @return string
+     */
+    public function getInwardCode(): string
+    {
+        // Format the postcode first
         $formatted_postcode = strtoupper(str_replace(' ', '', $this->postcode));
 
         // Get the last three characters
         return substr($formatted_postcode, (strlen($formatted_postcode) - 3));
-	}
+    }
 
-	/**
-	 * Get the postcode sector
-	 *
-	 * e.g. GL9 1 	 
-	 * 
-	 * @return string
-	 */
-	public function getSector(): string
-	{
-		// The sector is simply outcode + space + first digit of the inward code
-		return sprintf( '%s %s', $this->getOutcode(), substr( $this->getInwardCode(), 0, 1 ) );
-	}
+    /**
+     * Get the postcode sector
+     *
+     * e.g. GL9 1
+     *
+     * @return string
+     */
+    public function getSector(): string
+    {
+        // The sector is simply outcode + space + first digit of the inward code
+        return sprintf('%s %s', $this->getOutcode(), substr($this->getInwardCode(), 0, 1));
+    }
 
-	/**
-	 * Formats this postcode.
-	 *
-	 * @return string
-	 */
-	public function formatted(): string
-	{
-		$postcode = $this->postcode;
-		self::format($postcode);
-		return $postcode;
-	}
+    /**
+     * Formats this postcode.
+     *
+     * @return string
+     */
+    public function formatted(): string
+    {
+        $postcode = $this->postcode;
+        self::format($postcode);
+        return $postcode;
+    }
 
-	/**
-	 * Magic method; returns a string representation of this postcode
-	 *
-	 * @return string
-	 */
-	public function __toString(): string
-	{
-		return $this->formatted( );
-	}
+    /**
+     * Magic method; returns a string representation of this postcode
+     *
+     * @return string
+     */
+    public function __toString(): string
+    {
+        return $this->formatted();
+    }
 
 }
