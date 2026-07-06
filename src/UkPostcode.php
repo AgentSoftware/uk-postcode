@@ -1,4 +1,4 @@
-<?php namespace Lukaswhite\UkPostcode;
+<?php namespace AgentSoftware\UkPostcode;
 
 /**
  * UkPostcode class

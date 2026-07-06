@@ -1,6 +1,6 @@
 <?php
 
-use Lukaswhite\UkPostcode\UkPostcode;
+use AgentSoftware\UkPostcode\UkPostcode;
 
 class TestUkPostcodeClass extends \PHPUnit\Framework\TestCase {
 

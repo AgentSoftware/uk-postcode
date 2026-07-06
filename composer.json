@@ -1,10 +1,10 @@
 {
-    "name": "lukaswhite/uk-postcode",
+    "name": "agentsoftware/uk-postcode",
     "description": "A PHP class that represents a UK Postcode; for validating, formatting and querying",
     "authors": [
         {
             "name": "Lukas White",
-            "email": "hello@lukaswhite.com"
+            "email": "lukas@agentsoftware.net"
         }
     ],
     "require": {
@@ -12,7 +12,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Lukaswhite\\UkPostcode\\": "src/"
+            "AgentSoftware\\UkPostcode\\": "src/"
         }
     },
     "minimum-stability": "stable",
