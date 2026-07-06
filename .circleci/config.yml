@@ -1,38 +1,58 @@
-version: 2
+version: 2.1
 
 jobs:
-  build:
-    working_directory: /uk-postcode
+  install:
     docker:
-      - image: php:7.1-apache
-        environment:
-          APP_ENV: test
+      - image: cimg/php:8.5
+    working_directory: ~/app
     steps:
-      - run:
-          name: Install system packages
-          command: apt-get update && apt-get -y install git && apt-get -y install zip unzip
-      - run:
-          name: Install PHP extensions
-          command: docker-php-ext-install pdo
-      - run:
-          name: Set up XDebug
-          command: perl -pi -e 's/; z/z/' ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/xdebug.ini
       - checkout
+      - restore_cache:
+          keys:
+            - v1-dependencies-8.5-{{ checksum "composer.json" }}
+            - v1-dependencies-8.5-
       - run:
-          name: Install Composer
-          command: |
-            php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-            php -r "if (hash_file('SHA384', 'composer-setup.php') === trim(file_get_contents('https://composer.github.io/installer.sig'))) { echo 'Installer verified'; } else { echo 'Installer invalid'; unlink('composer-setup.php'); } echo PHP_EOL;"
-            php composer-setup.php
-            php -r "unlink('composer-setup.php');"
+          name: "Installing Composer dependencies"
+          command: composer install --no-interaction --prefer-dist
+      - save_cache:
+          key: v1-dependencies-8.5-{{ checksum "composer.json" }}
+          paths:
+            - vendor
+      - persist_to_workspace:
+          root: ~/app
+          paths:
+            - ./
+
+  test:
+    docker:
+      - image: cimg/php:8.5
+    working_directory: ~/app
+    steps:
+      - attach_workspace:
+          at: ~/app
       - run:
-          name: Display PHP information
-          command: |
-            php -v
-            php composer.phar --version
-      - run:
-          name: Install project dependencies
-          command: php composer.phar install
-      - run:
-          name: Run Unit tests
+          name: "Run Tests"
           command: vendor/bin/phpunit
+
+  lint:
+    docker:
+      - image: cimg/php:8.5
+    working_directory: ~/app
+    steps:
+      - attach_workspace:
+          at: ~/app
+      - run:
+          name: "Check code style (Pint)"
+          command: vendor/bin/pint --test
+
+workflows:
+  version: 2
+  build:
+    jobs:
+      - install
+      - test:
+          requires:
+            - install
+      - lint:
+          requires:
+            - install
