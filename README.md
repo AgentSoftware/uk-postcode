@@ -1,6 +1,6 @@
 # UK Postcode
 
-[![CircleCI](https://circleci.com/gh/AgentSoftware/uk-postcode.svg?style=svg)](https://circleci.com/gh/AgentSoftware/uk-postcode)
+[![CircleCI](https://dl.circleci.com/status-badge/img/gh/AgentSoftware/uk-postcode/tree/master.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/AgentSoftware/uk-postcode/tree/master)
 
 A PHP class that represents a UK Postcode.
 
