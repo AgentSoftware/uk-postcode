@@ -63,13 +63,13 @@ jobs:
       - run:
           name: Composer audit (prefer-lowest, report only)
           command: |
-            composer update --prefer-lowest --no-dev --prefer-dist --no-interaction --no-audit
+            composer update --prefer-lowest --no-dev --prefer-dist --no-interaction --no-audit --no-scripts
             composer audit --no-dev --abandoned=report || echo "Advisories reachable at lowest constraints (report only, not failing the build)."
       # Gate: what a consumer gets on a fresh install today.
       - run:
           name: Composer audit
           command: |
-            composer update --prefer-stable --prefer-dist --no-interaction --no-audit
+            composer update --prefer-stable --prefer-dist --no-interaction --no-audit --no-scripts
             composer audit --abandoned=report
 
 workflows:
