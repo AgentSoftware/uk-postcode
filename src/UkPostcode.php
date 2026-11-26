@@ -62,9 +62,6 @@ class UkPostcode implements Stringable
     {
     }
 
-    /**
-     * Utility (static) function; validate the supplied postcode.
-     */
     #[\NoDiscard]
     public static function validate(string $postcode): bool
     {
@@ -76,7 +73,7 @@ class UkPostcode implements Stringable
     }
 
     /**
-     * Utility (static) function; format the supplied postcode in place.
+     * Reformat the postcode in place; returns false, leaving it untouched, if it is invalid.
      *
      * @param string $toCheck Rewritten to the reformatted postcode when valid.
      */
@@ -113,9 +110,6 @@ class UkPostcode implements Stringable
         return false;
     }
 
-    /**
-     * Validates this postcode.
-     */
     #[\NoDiscard]
     public function isValid(): bool
     {
@@ -134,9 +128,6 @@ class UkPostcode implements Stringable
         return substr($compact, 0, strlen($compact) - 3);
     }
 
-    /**
-     * Returns the inward code.
-     */
     #[\NoDiscard]
     public function getInwardCode(): string
     {
@@ -158,9 +149,6 @@ class UkPostcode implements Stringable
         return "{$this->getOutcode()} {$sectorDigit}";
     }
 
-    /**
-     * Formats this postcode.
-     */
     #[\NoDiscard]
     public function formatted(): string
     {
@@ -170,9 +158,6 @@ class UkPostcode implements Stringable
         return $postcode;
     }
 
-    /**
-     * Returns a string representation of this postcode.
-     */
     public function __toString(): string
     {
         return $this->formatted();
