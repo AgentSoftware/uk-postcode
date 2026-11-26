@@ -153,7 +153,9 @@ class UkPostcode implements Stringable
     public function getSector(): string
     {
         // The sector is simply outcode + space + first digit of the inward code.
-        return sprintf('%s %s', $this->getOutcode(), substr($this->getInwardCode(), 0, 1));
+        $sectorDigit = substr($this->getInwardCode(), 0, 1);
+
+        return "{$this->getOutcode()} {$sectorDigit}";
     }
 
     /**
