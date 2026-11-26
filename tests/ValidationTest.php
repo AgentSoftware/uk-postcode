@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace AgentSoftware\UkPostcode\Tests;
 
 use AgentSoftware\UkPostcode\UkPostcode;
