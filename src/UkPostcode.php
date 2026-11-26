@@ -128,11 +128,10 @@ class UkPostcode implements Stringable
     #[\NoDiscard]
     public function getOutcode(): string
     {
-        // Format the postcode first.
-        $formatted = strtoupper(str_replace(' ', '', $this->postcode));
+        $compact = $this->compact();
 
         // The outcode is the postcode less the last three characters.
-        return substr($formatted, 0, strlen($formatted) - 3);
+        return substr($compact, 0, strlen($compact) - 3);
     }
 
     /**
@@ -141,11 +140,10 @@ class UkPostcode implements Stringable
     #[\NoDiscard]
     public function getInwardCode(): string
     {
-        // Format the postcode first.
-        $formatted = strtoupper(str_replace(' ', '', $this->postcode));
+        $compact = $this->compact();
 
         // Get the last three characters.
-        return substr($formatted, strlen($formatted) - 3);
+        return substr($compact, strlen($compact) - 3);
     }
 
     /**
@@ -176,5 +174,15 @@ class UkPostcode implements Stringable
     public function __toString(): string
     {
         return $this->formatted();
+    }
+
+    /**
+     * The raw postcode uppercased with spaces removed, e.g. "sw1a 2aa" => "SW1A2AA".
+     */
+    private function compact(): string
+    {
+        return $this->postcode
+            |> (fn (string $postcode): string => str_replace(' ', '', $postcode))
+            |> strtoupper(...);
     }
 }
