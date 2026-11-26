@@ -12,39 +12,39 @@ use Stringable;
 class UkPostcode implements Stringable
 {
     // Permitted letters depend upon their position in the postcode.
-    private const ALPHA_1 = '[abcdefghijklmnoprstuwyz]';    // Character 1
-    private const ALPHA_2 = '[abcdefghklmnopqrstuvwxy]';    // Character 2
-    private const ALPHA_3 = '[abcdefghjkpmnrstuvwxy]';      // Character 3
-    private const ALPHA_4 = '[abehmnprvwxy]';               // Character 4
-    private const ALPHA_5 = '[abdefghjlnpqrstuwxyz]';       // Character 5
-    private const BFPO_5 = '[abdefghjlnpqrst]{1}';          // BFPO character 5
-    private const BFPO_6 = '[abdefghjlnpqrstuwzyz]{1}';     // BFPO character 6
+    private const string ALPHA_1 = '[abcdefghijklmnoprstuwyz]';    // Character 1
+    private const string ALPHA_2 = '[abcdefghklmnopqrstuvwxy]';    // Character 2
+    private const string ALPHA_3 = '[abcdefghjkpmnrstuvwxy]';      // Character 3
+    private const string ALPHA_4 = '[abehmnprvwxy]';               // Character 4
+    private const string ALPHA_5 = '[abdefghjlnpqrstuwxyz]';       // Character 5
+    private const string BFPO_5 = '[abdefghjlnpqrst]';             // BFPO character 5
+    private const string BFPO_6 = '[abdefghjlnpqrstuwzyz]';        // BFPO character 6
 
     // Anguilla's fixed postcode. It has no capture groups, so format() handles it as a special case.
-    private const PATTERN_ANGUILLA = '/^ai-2640$/';
+    private const string PATTERN_ANGUILLA = '/^ai-2640$/';
 
     /**
      * The regular expressions describing every accepted postcode format.
      *
      * @var list<string>
      */
-    private const PATTERNS = [
+    private const array PATTERNS = [
         // BF1 type postcodes
-        '/^(bf1)([[:space:]]{0,})([0-9]{1}' . self::BFPO_5 . self::BFPO_6 . ')$/',
+        '/^(bf1)([[:space:]]*)([0-9]' . self::BFPO_5 . self::BFPO_6 . ')$/',
         // AN NAA, ANN NAA, AAN NAA and AANN NAA with a space
-        '/^(' . self::ALPHA_1 . '{1}' . self::ALPHA_2 . '{0,1}[0-9]{1,2})([[:space:]]{0,})([0-9]{1}' . self::ALPHA_5 . '{2})$/',
+        '/^(' . self::ALPHA_1 . self::ALPHA_2 . '?[0-9]{1,2})([[:space:]]*)([0-9]' . self::ALPHA_5 . '{2})$/',
         // ANA NAA
-        '/^(' . self::ALPHA_1 . '{1}[0-9]{1}' . self::ALPHA_3 . '{1})([[:space:]]{0,})([0-9]{1}' . self::ALPHA_5 . '{2})$/',
+        '/^(' . self::ALPHA_1 . '[0-9]' . self::ALPHA_3 . ')([[:space:]]*)([0-9]' . self::ALPHA_5 . '{2})$/',
         // AANA NAA
-        '/^(' . self::ALPHA_1 . '{1}' . self::ALPHA_2 . '{1}[0-9]{1}' . self::ALPHA_4 . ')([[:space:]]{0,})([0-9]{1}' . self::ALPHA_5 . '{2})$/',
+        '/^(' . self::ALPHA_1 . self::ALPHA_2 . '[0-9]' . self::ALPHA_4 . ')([[:space:]]*)([0-9]' . self::ALPHA_5 . '{2})$/',
         // The special postcode GIR 0AA
-        '/^(gir)([[:space:]]{0,})(0aa)$/',
+        '/^(gir)([[:space:]]*)(0aa)$/',
         // Standard BFPO numbers
-        '/^(bfpo)([[:space:]]{0,})([0-9]{1,4})$/',
+        '/^(bfpo)([[:space:]]*)([0-9]{1,4})$/',
         // c/o BFPO numbers
-        '/^(bfpo)([[:space:]]{0,})(c\/o([[:space:]]{0,})[0-9]{1,3})$/',
+        '/^(bfpo)([[:space:]]*)(c\/o([[:space:]]*)[0-9]{1,3})$/',
         // Overseas Territories
-        '/^([a-z]{4})([[:space:]]{0,})(1zz)$/',
+        '/^([a-z]{4})([[:space:]]*)(1zz)$/',
         // Anguilla
         self::PATTERN_ANGUILLA,
     ];
@@ -62,9 +62,7 @@ class UkPostcode implements Stringable
     {
     }
 
-    /**
-     * Utility (static) function; validate the supplied postcode.
-     */
+    #[\NoDiscard]
     public static function validate(string $postcode): bool
     {
         // Need to do an assignment, because we're going to pass by reference.
@@ -75,7 +73,7 @@ class UkPostcode implements Stringable
     }
 
     /**
-     * Utility (static) function; format the supplied postcode in place.
+     * Reformat the postcode in place; returns false, leaving it untouched, if it is invalid.
      *
      * @param string $toCheck Rewritten to the reformatted postcode when valid.
      */
@@ -101,7 +99,7 @@ class UkPostcode implements Stringable
             $postcode = strtoupper($matches[1] . ' ' . $matches[3]);
 
             // Take account of the special BFPO c/o format.
-            $postcode = preg_replace('/C\/O([[:space:]]{0,})/', 'c/o ', $postcode);
+            $postcode = preg_replace('/C\/O([[:space:]]*)/', 'c/o ', $postcode);
 
             // Return with the reformatted valid postcode in uppercase.
             $toCheck = $postcode;
@@ -112,9 +110,7 @@ class UkPostcode implements Stringable
         return false;
     }
 
-    /**
-     * Validates this postcode.
-     */
+    #[\NoDiscard]
     public function isValid(): bool
     {
         return self::validate($this->postcode);
@@ -123,39 +119,37 @@ class UkPostcode implements Stringable
     /**
      * Get the outcode; that is, the first part of the postcode.
      */
+    #[\NoDiscard]
     public function getOutcode(): string
     {
-        // Format the postcode first.
-        $formatted = strtoupper(str_replace(' ', '', $this->postcode));
+        $compact = $this->compact();
 
         // The outcode is the postcode less the last three characters.
-        return substr($formatted, 0, strlen($formatted) - 3);
+        return substr($compact, 0, strlen($compact) - 3);
     }
 
-    /**
-     * Returns the inward code.
-     */
+    #[\NoDiscard]
     public function getInwardCode(): string
     {
-        // Format the postcode first.
-        $formatted = strtoupper(str_replace(' ', '', $this->postcode));
+        $compact = $this->compact();
 
         // Get the last three characters.
-        return substr($formatted, strlen($formatted) - 3);
+        return substr($compact, strlen($compact) - 3);
     }
 
     /**
      * Get the postcode sector, e.g. GL9 1
      */
+    #[\NoDiscard]
     public function getSector(): string
     {
         // The sector is simply outcode + space + first digit of the inward code.
-        return sprintf('%s %s', $this->getOutcode(), substr($this->getInwardCode(), 0, 1));
+        $sectorDigit = substr($this->getInwardCode(), 0, 1);
+
+        return "{$this->getOutcode()} {$sectorDigit}";
     }
 
-    /**
-     * Formats this postcode.
-     */
+    #[\NoDiscard]
     public function formatted(): string
     {
         $postcode = $this->postcode;
@@ -164,11 +158,18 @@ class UkPostcode implements Stringable
         return $postcode;
     }
 
-    /**
-     * Returns a string representation of this postcode.
-     */
     public function __toString(): string
     {
         return $this->formatted();
+    }
+
+    /**
+     * The raw postcode uppercased with spaces removed, e.g. "sw1a 2aa" => "SW1A2AA".
+     */
+    private function compact(): string
+    {
+        return $this->postcode
+            |> (fn (string $postcode): string => str_replace(' ', '', $postcode))
+            |> strtoupper(...);
     }
 }

@@ -1,5 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
+namespace AgentSoftware\UkPostcode\Tests;
+
 use AgentSoftware\UkPostcode\UkPostcode;
 use PHPUnit\Framework\Attributes\DataProvider;
 
@@ -8,7 +12,7 @@ class ValidationTest extends \PHPUnit\Framework\TestCase
     /**
      * Try some valid postcodes.
      */
-    public function testValid()
+    public function testValid(): void
     {
         $this->assertTrue(\AgentSoftware\UkPostcode\UkPostcode::validate('GL9 1AH'));
         $this->assertTrue(\AgentSoftware\UkPostcode\UkPostcode::validate('gl91ah'));
@@ -42,7 +46,7 @@ class ValidationTest extends \PHPUnit\Framework\TestCase
     /**
      * Try some invalid postcodes.
      */
-    public function testInvalid()
+    public function testInvalid(): void
     {
         $this->assertFalse(\AgentSoftware\UkPostcode\UkPostcode::validate('postcode'));
         $this->assertFalse(\AgentSoftware\UkPostcode\UkPostcode::validate('P05T C0DE'));
@@ -58,7 +62,7 @@ class ValidationTest extends \PHPUnit\Framework\TestCase
      * The special (non-standard) formats should validate.
      */
     #[DataProvider('validSpecialFormats')]
-    public function testValidSpecialFormats(string $postcode)
+    public function testValidSpecialFormats(string $postcode): void
     {
         $this->assertTrue(UkPostcode::validate($postcode), "{$postcode} should be valid");
         $this->assertTrue((new UkPostcode($postcode))->isValid(), "{$postcode} should be valid");
@@ -87,7 +91,7 @@ class ValidationTest extends \PHPUnit\Framework\TestCase
      * Near-miss variants of the special formats should be rejected.
      */
     #[DataProvider('invalidSpecialFormats')]
-    public function testInvalidSpecialFormats(string $postcode)
+    public function testInvalidSpecialFormats(string $postcode): void
     {
         $this->assertFalse(UkPostcode::validate($postcode), "{$postcode} should be invalid");
     }
@@ -106,7 +110,7 @@ class ValidationTest extends \PHPUnit\Framework\TestCase
     /**
      * Validate a whole stack of postcodes
      */
-    public function testMultiple()
+    public function testMultiple(): void
     {
         if (($handle = fopen(__DIR__."/fixtures/postcodes.csv", "r")) !== false) {
             while (($data = fgetcsv($handle, 50, ",", '"', "")) !== false) {

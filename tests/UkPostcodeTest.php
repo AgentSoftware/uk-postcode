@@ -1,5 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
+namespace AgentSoftware\UkPostcode\Tests;
+
 use AgentSoftware\UkPostcode\UkPostcode;
 use PHPUnit\Framework\Attributes\DataProvider;
 
@@ -8,93 +12,79 @@ class UkPostcodeTest extends \PHPUnit\Framework\TestCase
     /**
      * Test the class instantiation
      */
-    public function testInstantiate()
+    public function testInstantiate(): void
     {
         $postcode = new UkPostcode('GL9 1AH');
         $this->assertInstanceOf(UkPostcode::class, $postcode);
-        $this->assertEquals('GL9 1AH', $postcode->postcode);
+        $this->assertSame('GL9 1AH', $postcode->postcode);
     }
 
     /**
      * Test the getOutcode() function
      */
-    public function testOutcode()
+    public function testOutcode(): void
     {
         $postcode = new UkPostcode('GL9 1AH');
-        $this->assertEquals('GL9', $postcode->getOutcode());
+        $this->assertSame('GL9', $postcode->getOutcode());
     }
 
     /**
      * Test the getInwardCode() function
      */
-    public function testGetInwardCode()
+    public function testGetInwardCode(): void
     {
         $postcode = new UkPostcode('GL9 1AH');
-        $this->assertEquals('1AH', $postcode->getInwardCode());
+        $this->assertSame('1AH', $postcode->getInwardCode());
 
         $postcode = new UkPostcode('sw11 5ds');
-        $this->assertEquals('5DS', $postcode->getInwardCode());
+        $this->assertSame('5DS', $postcode->getInwardCode());
 
     }
 
     /**
      * Test the getSector() function
      */
-    public function testGetSector()
+    public function testGetSector(): void
     {
         $postcode = new UkPostcode('GL9 1AH');
-        $this->assertEquals('GL9 1', $postcode->getSector());
+        $this->assertSame('GL9 1', $postcode->getSector());
 
         $postcode = new UkPostcode('sw11 5ds');
-        $this->assertEquals('SW11 5', $postcode->getSector());
+        $this->assertSame('SW11 5', $postcode->getSector());
 
     }
 
-    /**
-    public function testGetPostTown()
+    public function testFormatting(): void
     {
         $postcode = new UkPostcode('sw11 5ds');
-        var_dump($postcode->getPostTown());
-
-        $postcode = new UkPostcode('m4 4at');
-        var_dump($postcode->getPostTown());
-
-        $postcode = new UkPostcode('hd1 4sq');
-        var_dump($postcode->getPostTown());
-    }
-    **/
-
-    public function testFormatting()
-    {
-        $postcode = new UkPostcode('sw11 5ds');
-        $this->assertEquals('SW11 5DS', $postcode->formatted());
+        $this->assertSame('SW11 5DS', $postcode->formatted());
 
         $postcode = new UkPostcode('sw115ds');
-        $this->assertEquals('SW11 5DS', $postcode->formatted());
+        $this->assertSame('SW11 5DS', $postcode->formatted());
 
         $postcode = new UkPostcode('m45as');
-        $this->assertEquals('M4 5AS', $postcode->formatted());
+        $this->assertSame('M4 5AS', $postcode->formatted());
 
         $postcode = new UkPostcode('sw1a 2aa');
-        $this->assertEquals('SW1A 2AA', $postcode->formatted());
+        $this->assertSame('SW1A 2AA', $postcode->formatted());
 
 
     }
 
-    public function testToString()
+    public function testToString(): void
     {
         $postcode = new UkPostcode('sw11 5ds');
-        $this->assertEquals('SW11 5DS', $postcode->__toString());
-        $this->assertEquals('SW11 5DS', ( string ) $postcode);
+        $this->assertSame('SW11 5DS', $postcode->__toString());
+        $this->assertSame('SW11 5DS', ( string ) $postcode);
     }
 
     /**
      * The special (non-standard) formats should be normalised correctly.
      */
     #[DataProvider('specialFormats')]
-    public function testFormatsSpecialPostcodes(string $input, string $expected)
+    public function testFormatsSpecialPostcodes(string $input, string $expected): void
     {
-        $this->assertEquals($expected, (new UkPostcode($input))->formatted());
+        $this->assertSame($expected, (new UkPostcode($input))->formatted());
     }
 
     public static function specialFormats(): array
@@ -114,11 +104,11 @@ class UkPostcodeTest extends \PHPUnit\Framework\TestCase
     /**
      * Overseas territories must not all collapse onto Anguilla's code.
      */
-    public function testOverseasTerritoriesAreDistinct()
+    public function testOverseasTerritoriesAreDistinct(): void
     {
-        $this->assertEquals('ASCN 1ZZ', (new UkPostcode('ASCN 1ZZ'))->formatted());
-        $this->assertEquals('FIQQ 1ZZ', (new UkPostcode('FIQQ 1ZZ'))->formatted());
-        $this->assertNotEquals(
+        $this->assertSame('ASCN 1ZZ', (new UkPostcode('ASCN 1ZZ'))->formatted());
+        $this->assertSame('FIQQ 1ZZ', (new UkPostcode('FIQQ 1ZZ'))->formatted());
+        $this->assertNotSame(
             (new UkPostcode('ASCN 1ZZ'))->formatted(),
             (new UkPostcode('FIQQ 1ZZ'))->formatted()
         );
@@ -127,32 +117,32 @@ class UkPostcodeTest extends \PHPUnit\Framework\TestCase
     /**
      * The static format() helper rewrites its argument by reference and reports validity.
      */
-    public function testFormatRewritesByReference()
+    public function testFormatRewritesByReference(): void
     {
         $postcode = 'sw115ds';
         $this->assertTrue(UkPostcode::format($postcode));
-        $this->assertEquals('SW11 5DS', $postcode);
+        $this->assertSame('SW11 5DS', $postcode);
 
         $invalid = 'not a postcode';
         $this->assertFalse(UkPostcode::format($invalid));
-        $this->assertEquals('not a postcode', $invalid, 'Invalid input is left untouched');
+        $this->assertSame('not a postcode', $invalid, 'Invalid input is left untouched');
     }
 
     /**
      * The query methods operate on the raw value and don't blow up on odd input.
      */
-    public function testQueryMethodsAcceptUnspacedInput()
+    public function testQueryMethodsAcceptUnspacedInput(): void
     {
         $postcode = new UkPostcode('sw115ds');
-        $this->assertEquals('SW11', $postcode->getOutcode());
-        $this->assertEquals('5DS', $postcode->getInwardCode());
-        $this->assertEquals('SW11 5', $postcode->getSector());
+        $this->assertSame('SW11', $postcode->getOutcode());
+        $this->assertSame('5DS', $postcode->getInwardCode());
+        $this->assertSame('SW11 5', $postcode->getSector());
     }
 
-    public function testQueryMethodsOnEmptyStringDoNotError()
+    public function testQueryMethodsOnEmptyStringDoNotError(): void
     {
         $postcode = new UkPostcode('');
-        $this->assertEquals('', $postcode->getOutcode());
-        $this->assertEquals('', $postcode->getInwardCode());
+        $this->assertSame('', $postcode->getOutcode());
+        $this->assertSame('', $postcode->getInwardCode());
     }
 }
