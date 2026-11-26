@@ -50,20 +50,6 @@ class UkPostcodeTest extends \PHPUnit\Framework\TestCase
 
     }
 
-    /**
-    public function testGetPostTown()
-    {
-        $postcode = new UkPostcode('sw11 5ds');
-        var_dump($postcode->getPostTown());
-
-        $postcode = new UkPostcode('m4 4at');
-        var_dump($postcode->getPostTown());
-
-        $postcode = new UkPostcode('hd1 4sq');
-        var_dump($postcode->getPostTown());
-    }
-    **/
-
     public function testFormatting()
     {
         $postcode = new UkPostcode('sw11 5ds');
