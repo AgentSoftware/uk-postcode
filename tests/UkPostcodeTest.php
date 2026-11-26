@@ -1,5 +1,7 @@
 <?php
 
+namespace AgentSoftware\UkPostcode\Tests;
+
 use AgentSoftware\UkPostcode\UkPostcode;
 use PHPUnit\Framework\Attributes\DataProvider;
 
