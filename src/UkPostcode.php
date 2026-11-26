@@ -17,8 +17,8 @@ class UkPostcode implements Stringable
     private const string ALPHA_3 = '[abcdefghjkpmnrstuvwxy]';      // Character 3
     private const string ALPHA_4 = '[abehmnprvwxy]';               // Character 4
     private const string ALPHA_5 = '[abdefghjlnpqrstuwxyz]';       // Character 5
-    private const string BFPO_5 = '[abdefghjlnpqrst]{1}';          // BFPO character 5
-    private const string BFPO_6 = '[abdefghjlnpqrstuwzyz]{1}';     // BFPO character 6
+    private const string BFPO_5 = '[abdefghjlnpqrst]';              // BFPO character 5
+    private const string BFPO_6 = '[abdefghjlnpqrstuwzyz]';         // BFPO character 6
 
     // Anguilla's fixed postcode. It has no capture groups, so format() handles it as a special case.
     private const string PATTERN_ANGUILLA = '/^ai-2640$/';
@@ -30,21 +30,21 @@ class UkPostcode implements Stringable
      */
     private const array PATTERNS = [
         // BF1 type postcodes
-        '/^(bf1)([[:space:]]{0,})([0-9]{1}' . self::BFPO_5 . self::BFPO_6 . ')$/',
+        '/^(bf1)([[:space:]]*)([0-9]' . self::BFPO_5 . self::BFPO_6 . ')$/',
         // AN NAA, ANN NAA, AAN NAA and AANN NAA with a space
-        '/^(' . self::ALPHA_1 . '{1}' . self::ALPHA_2 . '{0,1}[0-9]{1,2})([[:space:]]{0,})([0-9]{1}' . self::ALPHA_5 . '{2})$/',
+        '/^(' . self::ALPHA_1 . self::ALPHA_2 . '?[0-9]{1,2})([[:space:]]*)([0-9]' . self::ALPHA_5 . '{2})$/',
         // ANA NAA
-        '/^(' . self::ALPHA_1 . '{1}[0-9]{1}' . self::ALPHA_3 . '{1})([[:space:]]{0,})([0-9]{1}' . self::ALPHA_5 . '{2})$/',
+        '/^(' . self::ALPHA_1 . '[0-9]' . self::ALPHA_3 . ')([[:space:]]*)([0-9]' . self::ALPHA_5 . '{2})$/',
         // AANA NAA
-        '/^(' . self::ALPHA_1 . '{1}' . self::ALPHA_2 . '{1}[0-9]{1}' . self::ALPHA_4 . ')([[:space:]]{0,})([0-9]{1}' . self::ALPHA_5 . '{2})$/',
+        '/^(' . self::ALPHA_1 . self::ALPHA_2 . '[0-9]' . self::ALPHA_4 . ')([[:space:]]*)([0-9]' . self::ALPHA_5 . '{2})$/',
         // The special postcode GIR 0AA
-        '/^(gir)([[:space:]]{0,})(0aa)$/',
+        '/^(gir)([[:space:]]*)(0aa)$/',
         // Standard BFPO numbers
-        '/^(bfpo)([[:space:]]{0,})([0-9]{1,4})$/',
+        '/^(bfpo)([[:space:]]*)([0-9]{1,4})$/',
         // c/o BFPO numbers
-        '/^(bfpo)([[:space:]]{0,})(c\/o([[:space:]]{0,})[0-9]{1,3})$/',
+        '/^(bfpo)([[:space:]]*)(c\/o([[:space:]]*)[0-9]{1,3})$/',
         // Overseas Territories
-        '/^([a-z]{4})([[:space:]]{0,})(1zz)$/',
+        '/^([a-z]{4})([[:space:]]*)(1zz)$/',
         // Anguilla
         self::PATTERN_ANGUILLA,
     ];
@@ -102,7 +102,7 @@ class UkPostcode implements Stringable
             $postcode = strtoupper($matches[1] . ' ' . $matches[3]);
 
             // Take account of the special BFPO c/o format.
-            $postcode = preg_replace('/C\/O([[:space:]]{0,})/', 'c/o ', $postcode);
+            $postcode = preg_replace('/C\/O([[:space:]]*)/', 'c/o ', $postcode);
 
             // Return with the reformatted valid postcode in uppercase.
             $toCheck = $postcode;
