@@ -65,6 +65,7 @@ class UkPostcode implements Stringable
     /**
      * Utility (static) function; validate the supplied postcode.
      */
+    #[\NoDiscard]
     public static function validate(string $postcode): bool
     {
         // Need to do an assignment, because we're going to pass by reference.
@@ -115,6 +116,7 @@ class UkPostcode implements Stringable
     /**
      * Validates this postcode.
      */
+    #[\NoDiscard]
     public function isValid(): bool
     {
         return self::validate($this->postcode);
@@ -123,6 +125,7 @@ class UkPostcode implements Stringable
     /**
      * Get the outcode; that is, the first part of the postcode.
      */
+    #[\NoDiscard]
     public function getOutcode(): string
     {
         // Format the postcode first.
@@ -135,6 +138,7 @@ class UkPostcode implements Stringable
     /**
      * Returns the inward code.
      */
+    #[\NoDiscard]
     public function getInwardCode(): string
     {
         // Format the postcode first.
@@ -147,6 +151,7 @@ class UkPostcode implements Stringable
     /**
      * Get the postcode sector, e.g. GL9 1
      */
+    #[\NoDiscard]
     public function getSector(): string
     {
         // The sector is simply outcode + space + first digit of the inward code.
@@ -156,6 +161,7 @@ class UkPostcode implements Stringable
     /**
      * Formats this postcode.
      */
+    #[\NoDiscard]
     public function formatted(): string
     {
         $postcode = $this->postcode;
