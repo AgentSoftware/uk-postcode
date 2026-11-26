@@ -12,23 +12,23 @@ use Stringable;
 class UkPostcode implements Stringable
 {
     // Permitted letters depend upon their position in the postcode.
-    private const ALPHA_1 = '[abcdefghijklmnoprstuwyz]';    // Character 1
-    private const ALPHA_2 = '[abcdefghklmnopqrstuvwxy]';    // Character 2
-    private const ALPHA_3 = '[abcdefghjkpmnrstuvwxy]';      // Character 3
-    private const ALPHA_4 = '[abehmnprvwxy]';               // Character 4
-    private const ALPHA_5 = '[abdefghjlnpqrstuwxyz]';       // Character 5
-    private const BFPO_5 = '[abdefghjlnpqrst]{1}';          // BFPO character 5
-    private const BFPO_6 = '[abdefghjlnpqrstuwzyz]{1}';     // BFPO character 6
+    private const string ALPHA_1 = '[abcdefghijklmnoprstuwyz]';    // Character 1
+    private const string ALPHA_2 = '[abcdefghklmnopqrstuvwxy]';    // Character 2
+    private const string ALPHA_3 = '[abcdefghjkpmnrstuvwxy]';      // Character 3
+    private const string ALPHA_4 = '[abehmnprvwxy]';               // Character 4
+    private const string ALPHA_5 = '[abdefghjlnpqrstuwxyz]';       // Character 5
+    private const string BFPO_5 = '[abdefghjlnpqrst]{1}';          // BFPO character 5
+    private const string BFPO_6 = '[abdefghjlnpqrstuwzyz]{1}';     // BFPO character 6
 
     // Anguilla's fixed postcode. It has no capture groups, so format() handles it as a special case.
-    private const PATTERN_ANGUILLA = '/^ai-2640$/';
+    private const string PATTERN_ANGUILLA = '/^ai-2640$/';
 
     /**
      * The regular expressions describing every accepted postcode format.
      *
      * @var list<string>
      */
-    private const PATTERNS = [
+    private const array PATTERNS = [
         // BF1 type postcodes
         '/^(bf1)([[:space:]]{0,})([0-9]{1}' . self::BFPO_5 . self::BFPO_6 . ')$/',
         // AN NAA, ANN NAA, AAN NAA and AANN NAA with a space
