@@ -17,8 +17,8 @@ class UkPostcode implements Stringable
     private const string ALPHA_3 = '[abcdefghjkpmnrstuvwxy]';      // Character 3
     private const string ALPHA_4 = '[abehmnprvwxy]';               // Character 4
     private const string ALPHA_5 = '[abdefghjlnpqrstuwxyz]';       // Character 5
-    private const string BFPO_5 = '[abdefghjlnpqrst]';              // BFPO character 5
-    private const string BFPO_6 = '[abdefghjlnpqrstuwzyz]';         // BFPO character 6
+    private const string BFPO_5 = '[abdefghjlnpqrst]';             // BFPO character 5
+    private const string BFPO_6 = '[abdefghjlnpqrstuwzyz]';        // BFPO character 6
 
     // Anguilla's fixed postcode. It has no capture groups, so format() handles it as a special case.
     private const string PATTERN_ANGUILLA = '/^ai-2640$/';
