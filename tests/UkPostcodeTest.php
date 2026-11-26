@@ -10,7 +10,7 @@ class UkPostcodeTest extends \PHPUnit\Framework\TestCase
     /**
      * Test the class instantiation
      */
-    public function testInstantiate()
+    public function testInstantiate(): void
     {
         $postcode = new UkPostcode('GL9 1AH');
         $this->assertInstanceOf(UkPostcode::class, $postcode);
@@ -20,7 +20,7 @@ class UkPostcodeTest extends \PHPUnit\Framework\TestCase
     /**
      * Test the getOutcode() function
      */
-    public function testOutcode()
+    public function testOutcode(): void
     {
         $postcode = new UkPostcode('GL9 1AH');
         $this->assertEquals('GL9', $postcode->getOutcode());
@@ -29,7 +29,7 @@ class UkPostcodeTest extends \PHPUnit\Framework\TestCase
     /**
      * Test the getInwardCode() function
      */
-    public function testGetInwardCode()
+    public function testGetInwardCode(): void
     {
         $postcode = new UkPostcode('GL9 1AH');
         $this->assertEquals('1AH', $postcode->getInwardCode());
@@ -42,7 +42,7 @@ class UkPostcodeTest extends \PHPUnit\Framework\TestCase
     /**
      * Test the getSector() function
      */
-    public function testGetSector()
+    public function testGetSector(): void
     {
         $postcode = new UkPostcode('GL9 1AH');
         $this->assertEquals('GL9 1', $postcode->getSector());
@@ -52,7 +52,7 @@ class UkPostcodeTest extends \PHPUnit\Framework\TestCase
 
     }
 
-    public function testFormatting()
+    public function testFormatting(): void
     {
         $postcode = new UkPostcode('sw11 5ds');
         $this->assertEquals('SW11 5DS', $postcode->formatted());
@@ -69,7 +69,7 @@ class UkPostcodeTest extends \PHPUnit\Framework\TestCase
 
     }
 
-    public function testToString()
+    public function testToString(): void
     {
         $postcode = new UkPostcode('sw11 5ds');
         $this->assertEquals('SW11 5DS', $postcode->__toString());
@@ -80,7 +80,7 @@ class UkPostcodeTest extends \PHPUnit\Framework\TestCase
      * The special (non-standard) formats should be normalised correctly.
      */
     #[DataProvider('specialFormats')]
-    public function testFormatsSpecialPostcodes(string $input, string $expected)
+    public function testFormatsSpecialPostcodes(string $input, string $expected): void
     {
         $this->assertEquals($expected, (new UkPostcode($input))->formatted());
     }
@@ -102,7 +102,7 @@ class UkPostcodeTest extends \PHPUnit\Framework\TestCase
     /**
      * Overseas territories must not all collapse onto Anguilla's code.
      */
-    public function testOverseasTerritoriesAreDistinct()
+    public function testOverseasTerritoriesAreDistinct(): void
     {
         $this->assertEquals('ASCN 1ZZ', (new UkPostcode('ASCN 1ZZ'))->formatted());
         $this->assertEquals('FIQQ 1ZZ', (new UkPostcode('FIQQ 1ZZ'))->formatted());
@@ -115,7 +115,7 @@ class UkPostcodeTest extends \PHPUnit\Framework\TestCase
     /**
      * The static format() helper rewrites its argument by reference and reports validity.
      */
-    public function testFormatRewritesByReference()
+    public function testFormatRewritesByReference(): void
     {
         $postcode = 'sw115ds';
         $this->assertTrue(UkPostcode::format($postcode));
@@ -129,7 +129,7 @@ class UkPostcodeTest extends \PHPUnit\Framework\TestCase
     /**
      * The query methods operate on the raw value and don't blow up on odd input.
      */
-    public function testQueryMethodsAcceptUnspacedInput()
+    public function testQueryMethodsAcceptUnspacedInput(): void
     {
         $postcode = new UkPostcode('sw115ds');
         $this->assertEquals('SW11', $postcode->getOutcode());
@@ -137,7 +137,7 @@ class UkPostcodeTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('SW11 5', $postcode->getSector());
     }
 
-    public function testQueryMethodsOnEmptyStringDoNotError()
+    public function testQueryMethodsOnEmptyStringDoNotError(): void
     {
         $postcode = new UkPostcode('');
         $this->assertEquals('', $postcode->getOutcode());
